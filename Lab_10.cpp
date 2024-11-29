@@ -118,8 +118,14 @@ int main() {
     printG(D, n);
 
     getEсс(D, n, ecc);
-    for (int i = 0; i < n; ++i) printf("%d ", ecc[i]);
-    printf("\nРадиус: %d\nДиаметр: %d", getRad(ecc, n), getDiam(ecc, n));
+    int r = getRad(ecc, n);
+    int d = getDiam(ecc, n);
+    for (int i = 0; i < n; ++i) {
+        //printf("%d ", ecc[i]);
+        if (ecc[i] == d) printf("Вершина %d: переферийная\n", i);
+        if (ecc[i] == r) printf("Вершина %d: центральная\n", i);
+    }
+    printf("\nРадиус: %d\nДиаметр: %d", r, d);
 
     return 0;
 }
