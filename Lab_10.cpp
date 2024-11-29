@@ -20,6 +20,20 @@ int** createG(int size) {
     return G;
 }
 
+int** createGO(int size) {
+    int** G = (int**)malloc(size * sizeof(int*));
+    for (int i = 0; i < size; ++i) {
+        G[i] = (int*)malloc(size * sizeof(int));
+    }
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            G[i][j] = (rand() % 2) ? rand() % 10 : 0;
+            G[j][i] = (i == j) ? 0 : G[j][i];
+        }
+    }
+    return G;
+}
+
 void printG(int** G, int size) {
     printf("  ");
     for (int i = 0; i < size; ++i) printf("%2d ", i);
@@ -66,7 +80,7 @@ void createDist(int** G, int size, int** D) {
 int main() {
     srand(time(NULL));
     int n = 4;
-    int** G = createG(n);
+    int** G = createGO(n);
     printG(G, n);
     int** D = (int**)malloc(n * sizeof(int*));
     int* ecc = (int*)malloc(n * sizeof(int));
