@@ -76,8 +76,35 @@ void createDist(int** G, int size, int** D) {
     }
 }
 
+void getEсс(int** D, int size, int* ecc) {
+    int max;
+    for (int i = 0; i < size; ++i) {
+        max = D[i][0];
+        for (int j = 0; j < size; ++j) {
+            max = (D[i][j] > max) ? D[i][j] : max;
+        }
+        ecc[i] = max;
+    }
+}
+
+int getRad(int* ecc, int size) {
+    int min = ecc[0];
+    for (int i = 1; i < size; ++i) {
+        min = (ecc[i] < min) ? ecc[i] : min;
+    }
+    return min;
+}
+
+int getDiam(int* ecc, int size) {
+    int max = ecc[0];
+    for (int i = 1; i < size; ++i) {
+        max = (ecc[i] > max) ? ecc[i] : max;
+    }
+    return max;
+}
 
 int main() {
+    setlocale(LC_ALL, "Rus");
     srand(time(NULL));
     int n = 4;
     int** G = createGO(n);
@@ -90,6 +117,9 @@ int main() {
     createDist(G, n, D);
     printG(D, n);
 
+    getEсс(D, n, ecc);
+    for (int i = 0; i < n; ++i) printf("%d ", ecc[i]);
+    printf("\nРадиус: %d\nДиаметр: %d", getRad(ecc, n), getDiam(ecc, n));
 
     return 0;
 }
