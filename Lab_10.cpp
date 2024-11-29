@@ -132,5 +132,22 @@ int main(int argc, char* argv[]) {
     else G = createGO(n);
     if (!oriented) mirG(G, n);
     printG(G, n);
+    int** D = (int**)malloc(n * sizeof(int*));
+    int* ecc = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; ++i) {
+        D[i] = (int*)malloc(n * sizeof(int));
+    }
+    createDist(G, n, D);
+    printG(D, n);
+
+    getEсс(D, n, ecc);
+    int r = getRad(ecc, n);
+    int d = getDiam(ecc, n);
+    for (int i = 0; i < n; ++i) {
+        //printf("%d ", ecc[i]);
+        if (ecc[i] == d) printf("Вершина %d: переферийная\n", i);
+        if (ecc[i] == r) printf("Вершина %d: центральная\n", i);
+    }
+    printf("\nРадиус: %d\nДиаметр: %d", r, d);
     return 0;
 }
