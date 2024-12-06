@@ -49,7 +49,7 @@ void printG(int** G, int size) {
     for (int i = 0; i < size; ++i) {
         printf("%d ", i);
         for (int j = 0; j < size; ++j) {
-            printf("%2d ", G[i][j]);
+            printf("%2d ", (G[i][j] != INT_MAX) ? G[i][j] : -1);
         }
         printf("\n");
     }
@@ -66,7 +66,7 @@ void DiFS(int** G, int size, int* dist, int s) {
         q.pop();
 
         for (int i = 0; i < size; ++i) {
-            if (G[s][i] && dist[i] == -1) {
+            if (G[s][i] && dist[i] > dist[s] + G[s][i]) {
                 q.push(i);
                 dist[i] = dist[s] + G[s][i];
 
@@ -78,7 +78,7 @@ void DiFS(int** G, int size, int* dist, int s) {
 void createDist(int** G, int size, int** D) {
     int* dist = (int*)malloc(size * sizeof(int));
     for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) dist[j] = -1;
+        for (int j = 0; j < size; ++j) dist[j] = INT_MAX;
         DiFS(G, size, dist, i);
         for (int j = 0; j < size; ++j) D[i][j] = dist[j];
     }
@@ -87,9 +87,9 @@ void createDist(int** G, int size, int** D) {
 void getEсс(int** D, int size, int* ecc) {
     int max;
     for (int i = 0; i < size; ++i) {
-        max = D[i][0];
+        max = INT_MIN;
         for (int j = 0; j < size; ++j) {
-            max = (D[i][j] > max) ? D[i][j] : max;
+            max = (D[i][j] > max && D[i][j] != INT_MAX) ? D[i][j] : max;
         }
         ecc[i] = max;
     }
@@ -115,10 +115,10 @@ int main(int argc, char* argv[]) {
     setlocale(LC_ALL, "Rus");
     int n = 3;
     int weighted = 0, oriented = 0;
-        int** G = NULL;
-        srand(time(NULL));
+    int** G = NULL;
+    srand(time(NULL));
     if (argc > 1) {
-        for (int i = 0; i < argc; ++i) {
+        for (int i = 1; i < argc; ++i) {
             if (strcmp(argv[i], "-n") == 0) {
                 n = atoi(argv[i + 1]);
                 ++i;
@@ -127,6 +127,7 @@ int main(int argc, char* argv[]) {
             else if (strcmp(argv[i], "-o") == 0) oriented = 1;
         }
     }
+    else printf("Вы можете передать параметры в программу размер графа (-n <значение>),\n\t\t\t\t\t ориентированность (-o),\n\t\t\t\t\t взвешенность (-w)\n");
     printf("n=%d w=%d o=%d\n", n, weighted, oriented);
     if (weighted) G = createGOW(n);
     else G = createGO(n);
